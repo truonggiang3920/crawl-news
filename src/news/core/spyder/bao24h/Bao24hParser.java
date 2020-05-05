@@ -7,68 +7,21 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.management.modelmbean.ModelMBean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bao24hParser extends Bao24hModel {
+public class Bao24hParser  {
+    private static NewsDB newsDB =new NewsDB();
+    private static  Bao24hParser bao24hParser = new Bao24hParser();
 
 
-    public Bao24hModel parserDetail(String url) {
-        Document html = getHtmlContent(url);
-
-        Bao24hModel result = new Bao24hModel();
-
-        String avatar = html.selectFirst("center").selectFirst("img").attr("src");
-        String name = html.selectFirst("article_title").ownText();
-        String  = "";
-        String director = "";
-        String country = "";
-        String publicYear = "";
-        String publicDate = "";
-        String voteCount = "";
-
-
-        Element pros = html.selectFirst("dl.movie-dl");
-
-        Elements child = pros.children();
-        for(int i=0; i<child.size(); i ++){
-            if(child.get(i).ownText().equals("Điểm IMDb:")){
-                imdb = child.get(i+1).ownText();
-            }
-            if(child.get(i).ownText().equals("Số người đánh giá:")){
-                voteCount = child.get(i+1).text();
-            }
-            if(child.get(i).ownText().equals("Đạo diễn:")){
-                director = child.get(i+1).text();
-            }
-            if(child.get(i).ownText().equals("Quốc gia:")){
-                country = child.get(i+1).text();
-            }
-            if(child.get(i).ownText().equals("Năm:")){
-                publicYear = child.get(i+1).text();
-            }
-            if(child.get(i).ownText().equals("Ngày ra rạp:")){
-                publicDate = child.get(i+1).text();
-            }
-        }
-
-        result.se(name);
-        result.setAvatar(avatar);
-        result.setImdScore(imdb);
-        result.setVoteCount(voteCount);
-        result.setDirectors(director);
-        result.setCountry(country);
-        result.setPublicDate(publicDate);
-        result.setPublicYear(publicYear);
-        return result;
-    }
-
-    public List<String> parserListLink(String url) {
+    public static List <String> parserListLink(String url) {
 
         Document html = getHtmlContent(url);
-        Elements elements = html.select("bxDoiSbIt");
+        Elements elements = html.select("span.nwsTit.postname");
 
-        List<String> linkArray = new ArrayList<>();
+        List <String> linkArray = new ArrayList<>();
 
         for(int i=0; i < elements.size(); i ++){
             Element element = elements.get(i);
@@ -78,7 +31,7 @@ public class Bao24hParser extends Bao24hModel {
         return linkArray;
     }
 
-    private Document getHtmlContent(String url){
+    private static Document getHtmlContent(String url){
         Document pageHtml;
         try {
             Connection.Response response = Jsoup.connect(url)
@@ -87,11 +40,43 @@ public class Bao24hParser extends Bao24hModel {
                     .followRedirects(true)
                     .timeout(30000)
                     .execute();
-            pageHtml = response.parse();
+            pageHtml = response.parse(); 
             return pageHtml;
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
         return null;
+    }
+    public NewsModel getContent(String url){
+        NewsModel model = new NewsModel();
+        Document html = getHtmlContent(url);
+        String newsAvatar = null;
+        try{
+           newsAvatar  = html.selectFirst("img.news-image").attr("src");
+        } catch (Exception e){
+            System.out.println("Lỗi lấy avatar");
+        }
+        String newsName = html.selectFirst("h1#article_title").ownText();
+        String newsContent = html.selectFirst("article.nwsHt.nwsUpgrade#article_body").text();
+        String newsPostTime = html.selectFirst("div.updTm.updTmD.mrT5").ownText();
+        String resource = html.selectFirst("span.dots#url_origin_cut").ownText();
+
+        model.setNewsAvatar(newsAvatar);
+        model.setNewsName(newsName);
+        model.setNewsLink(url);
+        model.setNewContent(newsContent);
+        model.setNewsPostTime(newsPostTime);
+        model.setResource(resource);
+        return model;
+    }
+    public void getAllNews(){
+        Bao24hParser bao24hParser = new Bao24hParser();
+        String url = "https://www.24h.com.vn/bong-da-c48.html";
+        List<String> listLink = bao24hParser.parserListLink(url);
+        for(String link : listLink)
+        {
+            NewsModel model = bao24hParser.getContent(link);
+            System.out.println(model.toString());
+        }
     }
 }

@@ -4,54 +4,79 @@ public class NewsModel {
     private String newsName;
     private String newsAvatar;
     private String newsLink;
-    private String newsSource;
     private String newContent;
     private  String newsPostTime;
-    private String newsOtherSources;
+    private String resource;
     public NewsModel(){};
-    public NewsModel (String newsName, String newsAvatar, String newsLink, String newsSource,
-                      String newContent, String newsPostTime, String newsOtherSources)
+    public NewsModel (String newsName, String newsAvatar, String newsLink,
+                      String newContent, String newsPostTime, String resource)
     {
         this.newsName = newsName;
         this.newsAvatar = newsAvatar;
         this.newsLink = newsLink;
-        this.newsSource = newsSource;
         this.newContent = newContent;
         this.newsPostTime = newsPostTime;
-        this.newsOtherSources = newsOtherSources;
+        this.resource = resource;
     }
 
-    public void setName(String name) { this.newsName = newsName; }
-    public String getName() { return newsName; }
 
-    public void setAvatar(String avatar) { this.newsAvatar = newsAvatar; }
-    public String getAvatar() { return newsAvatar; }
+    public String getNewsName() {
+        return newsName;
+    }
 
-    public void setLink(String link) { this.newsLink = newsLink; }
-    public String getLink() { return newsLink; }
+    public void setNewsName(String newsName) {
+        this.newsName = newsName;
+    }
 
-    public void setSource(String source) { this.newsSource = source; }
-    public String getSource() { return newsSource; }
+    public String getNewsAvatar() {
+        return newsAvatar;
+    }
 
-    public void setContent(String content) { this.newContent = content; }
-    public String getContent() { return newContent; }
+    public void setNewsAvatar(String newsAvatar) {
+        this.newsAvatar = newsAvatar;
+    }
 
-    public void setNewsPostTime(String newsPostTime) { this.newsPostTime = newsPostTime; }
-    public String getNewsPostTime() { return newsPostTime; }
+    public String getNewsLink() {
+        return newsLink;
+    }
 
-    public void setOtherSources(String otherSources) { this.newsOtherSources = otherSources; }
-    public String getOtherSources() { return newsOtherSources; }
+    public void setNewsLink(String newsLink) {
+        this.newsLink = newsLink;
+    }
+
+    public String getNewContent() {
+        return newContent;
+    }
+
+    public void setNewContent(String newContent) {
+        this.newContent = newContent;
+    }
+
+    public String getNewsPostTime() {
+        return newsPostTime;
+    }
+
+    public void setNewsPostTime(String newsPostTime) {
+        this.newsPostTime = newsPostTime;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
 
     @Override
     public String toString() {
         return "NewsModel{" +
-                "newsName='" + newsName + '\'' +
-                ", newsAvatar='" + newsAvatar + '\'' +
-                ", newsLink='" + newsLink + '\'' +
-                ", newsSource='" + newsSource + '\'' +
-                ", newContent='" + newContent + '\'' +
-                ", newsPostTime='" + newsPostTime + '\'' +
-                ", newsOtherSources='" + newsOtherSources + '\'' +
+                "\n newsName='" + newsName + '\'' +
+                " \n newsAvatar='" + newsAvatar + '\'' +
+                " \n newsLink='" + newsLink + '\'' +
+                " \n newContent='" + newContent + '\'' +
+                " \n newsPostTime='" + newsPostTime + '\'' +
+                " \n resource='" + resource + '\'' +
                 '}';
     }
 }
